@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				-30,
+				-320
+			],
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "DownNote"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-7,
+				-276
+			],
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "UpNote"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-20,
+				-292
+			],
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "IdleDance"
+		},
+		{
+			"offsets": [
+				35,
+				-286
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singLEFT",
+			"loop": false,
+			"name": "RightNote"
+		},
+		{
+			"offsets": [
+				-49,
+				-292
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singRIGHT",
+			"loop": false,
+			"name": "LeftNote"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/Sans_HEHEHE_Assets",
+	"position": [
+		0,
+		0
+	],
+	"healthicon": "sans",
+	"flip_x": true,
+	"healthbar_colors": [
+		200,
+		200,
+		200
+	],
+	"camera_position": [
+		-100,
+		285
+	],
+	"sing_duration": 6.1,
+	"scale": 1
+}

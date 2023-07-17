@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="mokey_story_mode.png">
+	<!-- Created with Adobe Animate version 21.0.0.35450 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="story mode selected0000" x="5" y="5" width="685" height="277"/>
+	<SubTexture name="story mode selected0001" x="695" y="5" width="685" height="277"/>
+	<SubTexture name="story mode selected0002" x="5" y="287" width="685" height="277"/>
+	<SubTexture name="story mode unselected0000" x="695" y="287" width="661" height="267"/>
+	<SubTexture name="story mode unselected0001" x="695" y="287" width="661" height="267"/>
+	<SubTexture name="story mode unselected0002" x="1361" y="287" width="661" height="267"/>
+	<SubTexture name="story mode unselected0003" x="1361" y="287" width="661" height="267"/>
+</TextureAtlas>

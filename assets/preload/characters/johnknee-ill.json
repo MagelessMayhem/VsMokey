@@ -1,0 +1,94 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				100,
+				-300
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "idle",
+			"loop": false,
+			"name": "IdleDance"
+		},
+		{
+			"offsets": [
+				100,
+				-300
+			],
+			"indices": [
+				6,
+				7,
+				8,
+				9
+			],
+			"fps": 24,
+			"anim": "idle-loop",
+			"loop": true,
+			"name": "IdleDance"
+		},
+		{
+			"offsets": [
+				162,
+				-316
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singLEFT",
+			"loop": false,
+			"name": "LeftNote"
+		},
+		{
+			"offsets": [
+				162,
+				-311
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singRIGHT",
+			"loop": false,
+			"name": "RightNote"
+		},
+		{
+			"offsets": [
+				162,
+				-235
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singUP",
+			"loop": false,
+			"name": "UpNote"
+		},
+		{
+			"offsets": [
+				162,
+				-320
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singDOWN",
+			"loop": false,
+			"name": "DownNote"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/Johknee_N_Ill_ Assets",
+	"position": [
+		0,
+		0
+	],
+	"healthicon": "johnknee-ill",
+	"flip_x": false,
+	"healthbar_colors": [
+		255,
+		255,
+		255
+	],
+	"camera_position": [
+		-260,
+		380
+	],
+	"sing_duration": 6.1,
+	"scale": 1
+}

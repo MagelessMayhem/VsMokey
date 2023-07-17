@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				325,
+				-27
+			],
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "LeftNote"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				230,
+				-155
+			],
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "DownNote"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				118,
+				193
+			],
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "UpNote"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-13,
+				145
+			],
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "RightNote"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				150,
+				-40
+			],
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "IdleDance"
+		}
+	],
+	"no_antialiasing": true,
+	"image": "characters/WindowsMokey_Assets",
+	"position": [
+		0,
+		0
+	],
+	"healthicon": "windows-mokey",
+	"flip_x": false,
+	"healthbar_colors": [
+		80,
+		73,
+		95
+	],
+	"camera_position": [
+		-400,
+		95
+	],
+	"sing_duration": 6.1,
+	"scale": 1
+}

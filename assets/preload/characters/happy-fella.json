@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				5,
+				-377
+			],
+			"anim": "singLEFT",
+			"fps": 20,
+			"name": "LeftNote",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-35,
+				-464
+			],
+			"anim": "singDOWN",
+			"fps": 20,
+			"name": "DownNote",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				38,
+				-333
+			],
+			"anim": "singUP",
+			"fps": 20,
+			"name": "UpNote",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-29,
+				-378
+			],
+			"anim": "singRIGHT",
+			"fps": 20,
+			"name": "RightNote",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-65,
+				-370
+			],
+			"anim": "idle",
+			"fps": 20,
+			"name": "IdleDance",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/Happy_Fella_LOL",
+	"position": [
+		0,
+		0
+	],
+	"healthicon": "happy-fella",
+	"flip_x": false,
+	"healthbar_colors": [
+		119,
+		78,
+		76
+	],
+	"camera_position": [
+		-110,
+		365
+	],
+	"sing_duration": 6.1,
+	"scale": 1
+}
