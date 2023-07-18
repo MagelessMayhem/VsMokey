@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Creating Mods | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Creating Mods" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/creating-mods/" />
+<meta property="og:url" content="http://localhost:4000/docs/creating-mods/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Creating Mods" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Creating Mods","url":"http://localhost:4000/docs/creating-mods/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<h1 id="creating-mods">Creating Mods</h1>
+
+<p>The Polymod format is fairly simple – create a folder for your mod, and stick some files in it. These files will then either replace or modify files from the base asset set. You have three basic operations:</p>
+
+<ul>
+  <li>Replace: provide files to replace the default ones</li>
+  <li>Append: add some lines of text to the end of an existing text file</li>
+  <li>Merge: insert some text in the middle of an existing text file, according to specified pattern matching</li>
+</ul>
+
+<h2 id="basic-mod-structure">Basic mod structure</h2>
+
+<ul>
+  <li>root folder</li>
+  <li><code class="language-plaintext highlighter-rouge">_append</code> folder
+    <ul>
+      <li>Assets placed in the <code class="language-plaintext highlighter-rouge">_append</code> folder will be Appended to those from the default asset library.</li>
+      <li>This is only valid for plain text files; for JSON, CSV, and XML files, use Merging instead.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">_merge</code> folder
+    <ul>
+      <li>Assets placed in the <code class="language-plaintext highlighter-rouge">_merge</code> folder will be Merged those from the default asset library.</li>
+      <li>This is supported for CSV, TSV, JSON, XML, and plaintext files by default.</li>
+      <li>Other asset types (such as images)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="root-folder">Root folder</h3>
+
+<p>Any files you place here will replace those found in the default asset library. For example, if the default asset library has a file called <code class="language-plaintext highlighter-rouge">images/apple.png</code>, you can provide your own version by placing it at <code class="language-plaintext highlighter-rouge">&lt;modroot&gt;/images/apple.png</code>.</p>
+
+<p>When loading multiple mods, if several mods all provide the same file, the last one loaded will provide the final asset. You can see this behavior in the included sample. This is why the order in which you load mods matters!</p>
+
+<h3 id="_append-folder">_append folder</h3>
+
+<p>Any text files you place here will have their contents appended to the ends of files with the same names. So if the base game has a file called <code class="language-plaintext highlighter-rouge">text/hello.txt</code> that says:</p>
+
+<p><code class="language-plaintext highlighter-rouge">Hello, world!</code></p>
+
+<p>You can add additional lines by placing a file at <code class="language-plaintext highlighter-rouge">&lt;modroot&gt;/&lt;appendFolder&gt;/text/hello.txt</code> that says:</p>
+
+<p><code class="language-plaintext highlighter-rouge">Hello from my mod!</code></p>
+
+<p>Which will result in this in game when <code class="language-plaintext highlighter-rouge">text/hello.txt</code> is loaded and displayed:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hello, world!
+Hello from my mod!
+</code></pre></div></div>
+
+<p>By default, the append folder Name will be <code class="language-plaintext highlighter-rouge">_append</code>, but this can be changed. See <a href="./configuring-polymod/">Configuring Polymod</a> for more information.</p>
+
+<p>When loading multiple mods, note that appending applies AFTER replacement! If several mods replace a file and serveral other mods append it, the last mod to replace the file will be used as a base (overriding the base library and any mods before it), then all <code class="language-plaintext highlighter-rouge">_append</code> files will be then applied in modload order.</p>
+
+<h3 id="_merge-folder">_merge folder</h3>
+
+<p>This folder allows you to merge into files containing a more complex data structure, such as XML, CSV/TSV, or JSON. The format of the files in this folder depends on the file type of the file being merged into.</p>
+
+<p>See <a href="./merging-files/">Merging Files</a> for more information on how merging works for each file type.</p>
+
+<p>By default, the merge folder name will be <code class="language-plaintext highlighter-rouge">_merge</code>, but this can be changed. See <a href="./configuring-polymod/">Configuring Polymod</a> for more information.</p>
+
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

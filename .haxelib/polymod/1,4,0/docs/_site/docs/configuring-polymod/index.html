@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Configuring Polymod | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Configuring Polymod" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/configuring-polymod/" />
+<meta property="og:url" content="http://localhost:4000/docs/configuring-polymod/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Configuring Polymod" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Configuring Polymod","url":"http://localhost:4000/docs/configuring-polymod/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<h1 id="configuring-polymod">Configuring Polymod</h1>
+
+<p>It may be that the default settings are not suitable for your needs. This document will provide all the available options you can configure in your project.</p>
+
+<h2 id="compiler-configuration">Compiler Configuration</h2>
+
+<p>The first type of configuration available for Polymod is the compiler options. You can set these values in your <code class="language-plaintext highlighter-rouge">project.xml</code> file using a <code class="language-plaintext highlighter-rouge">haxedef</code> tag. You can also modify the appropriate property in <code class="language-plaintext highlighter-rouge">PolymodConfig</code> in your code before initializing Polymod, although this is not recommended.</p>
+
+<p>The available options are:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_DEBUG</code>: If <code class="language-plaintext highlighter-rouge">true</code>, additional debug output will be provided by Polymod.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">false</code>.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_ROOT_PATH</code>: The base path from which scripts should be accessed.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">data/</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_USE_NAMESPACE</code>: Whether script paths should, by default, be relative to the class’s path or the root path.
+    <ul>
+      <li>For example, if true, <code class="language-plaintext highlighter-rouge">demo.Simulation#updateBee</code> will use <code class="language-plaintext highlighter-rouge">data/demo/Simulation/updateBee.txt</code></li>
+      <li>If false, <code class="language-plaintext highlighter-rouge">demo.Simulation#updateBee</code> will use <code class="language-plaintext highlighter-rouge">data/updateBee.txt</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_SCRIPT_EXT</code>: The file extension used for script files.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">.txt</code>.</li>
+      <li>The default option is in place for compatibility reasons, you’ll probably want to change it to <code class="language-plaintext highlighter-rouge">.hscript</code> or something similar.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_SCRIPT_LIBRARY</code>: The asset library to load scripts from.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">default</code>.</li>
+      <li>Only relevant for Lime and OpenFL/HaxeFlixel projects which utilize multiple asset libraries.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_API_VERSION_MATCH</code>: Determines the precision required for
+    <ul>
+      <li>Possible values are <code class="language-plaintext highlighter-rouge">NONE</code> (no version matching required), <code class="language-plaintext highlighter-rouge">MATCH_MAJOR</code> (major version must match), <code class="language-plaintext highlighter-rouge">MATCH_MINOR</code> (major and minor version must match), or <code class="language-plaintext highlighter-rouge">MATCH_PATCH</code> (major, minor, and patch version must match).</li>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">MATCH_PATCH</code>.</li>
+      <li>The default option is in place for compatibility reasons, you’ll probably want to change it to <code class="language-plaintext highlighter-rouge">MATCH_MINOR</code> or higher.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_APPEND_FOLDER</code>: Set this value to change the directory which append files are read from.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">_append</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_MERGE_FOLDER</code>: Set this value to change the directory which merge files are read from.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">_merge</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_MOD_METADATA_FILE</code>: Set this value to change the file Polymod uses for mod metadata.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">_polymod_meta.json</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_MOD_PACK_FILE</code>: Set this value to change the file Polymod uses for modpack metadata.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">_polymod_pack.txt</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_MOD_ICON_FILE</code>: Set this value to change the file Polymod uses for mod icons.
+    <ul>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">_polymod_icon.png</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">POLYMOD_MOD_IGNORE</code>: Set this value to change the list of files which Polymod ignores when loading mods.
+    <ul>
+      <li>Use a comma separated list of file names.</li>
+      <li>Defaults to <code class="language-plaintext highlighter-rouge">LICENSE.txt,ASSET_LICENSE.txt,CODE_LICENSE.txt</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="polymod-parameters">Polymod Parameters</h2>
+
+<p>The other type of configuration available for Polymod is the parameters which you may provide to Polymod when you initialize your mods.</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Polymod</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="cm">/**
+     * The directory path on your file system which contains all your mods.
+     */</span>
+    <span class="na">modRoot</span><span class="p">:</span> <span class="s2">"./mods"</span><span class="p">,</span>
+
+    <span class="cm">/**
+     * The list of mods to load by ID,
+     * where the ID is the directory name of the mod folder relative to `modRoot`.
+     */</span>
+    <span class="na">dirs</span><span class="p">:</span> <span class="p">[</span><span class="s2">"mymod"</span><span class="p">]</span>
+
+    <span class="cm">/**
+     * (optional) The framework defines which Haxe framework you're using to load assets, which determines what backend to use.
+     * Polymod can attempt to determine this automatically, so only use this option
+     * if it has trouble, or you need to specify a custom backend.
+     */</span>
+    <span class="na">framework</span><span class="p">:</span> <span class="nx">CUSTOM</span><span class="p">,</span>
+
+    <span class="cm">/**
+     * (optional) Specify any additional configuration paramters needed for your specific Haxe framework.
+     */</span>
+    <span class="na">frameworkParams</span><span class="p">:</span> <span class="p">{</span>
+        <span class="cm">/**
+         * Lime/OpenFL only:
+         * If you're using custom or non-default asset libraries, then you must provide a key=&gt;value store
+         * mapping the name of each asset library to a path prefix in your mod structure.
+         * Thus, assets in the `world1` library go in the `world1` folder within your mod folder, etc.
+         */</span>
+        <span class="na">assetLibraryPaths</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"default"</span> <span class="o">=&gt;</span> <span class="s2">"./preload"</span><span class="p">,</span>
+			<span class="s2">"world1"</span> <span class="o">=&gt;</span> <span class="s2">"./world1"</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**
+     * (optional) A version string which should conform with Semantic Versioning 2.0 standards.
+     * This lets you enforce a modding API for your application.
+     * Any mod which is not compatible will gracefully fail to load, allowing you to notify the user that the mod needs to be updated.
+     * Note that for a mod to be compatible, it must match in both major, minor, AND patch versions.
+     * 
+     * You should set this to a reasonable value early on, then update it whenever you change how mods interact with your application,
+     * including when you change directory structures or modify scripts in a way that introduces breaking changes.
+     * 
+     * @see https://semver.org/
+     */</span>
+    <span class="na">apiVersion</span><span class="p">:</span> <span class="s2">"1.0.0"</span><span class="p">,</span>
+
+    <span class="cm">/**
+     * (optional) A function which takes a `PolymodError` as an argument.
+     * 
+     * This is called whenever an error occurs within Polymod; if you do not provide a function to call here,
+     * any failures will happen silently.
+     */</span>
+    <span class="na">errorCallback</span><span class="p">:</span> <span class="nx">onError</span><span class="p">,</span>
+
+    <span class="cm">/**
+     * (optional) Allows you to ensure a specific version of a mod is loaded by Polymod.
+     * 
+     * If this array is provided, Polymod will check to see if each mod you attempt to load matches a particular version
+     * (as in the mod's own version, not your game/app's modding API version).
+     * If any of the mods aren't compatible with the specified version numbers,`errorCallback` will receive a `PARAM_MOD_VERSIONS` error.
+     */</span>
+    <span class="na">modVersions</span><span class="p">:</span> <span class="p">[</span><span class="s2">"1.3.0"</span><span class="p">],</span>
+
+    <span class="cm">/**
+     * (optional) The parsing rules to use for various data formats.
+     * This determines how appending and merging should work for certain file extensions or even specific file names.
+     */</span>
+    <span class="na">parseRules</span><span class="p">:</span> <span class="nx">getParseRules</span><span class="p">(),</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>For more information on defining parse rules, see <a href="./parse-rules">Parse Rules</a>.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

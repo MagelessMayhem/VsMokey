@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Mod Metadata | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Mod Metadata" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/mod-metadata/" />
+<meta property="og:url" content="http://localhost:4000/docs/mod-metadata/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Mod Metadata" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Mod Metadata","url":"http://localhost:4000/docs/mod-metadata/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<p>In order to be recognized by Polymod, a mod folder must contain a metadata file. By default, this file is located at <code class="language-plaintext highlighter-rouge">_polymod_meta.json</code>, but this can be reconfigured in your own projects. See <a href="./configuring-polymod">Configuring Polymod</a> for more information.</p>
+
+<p>A mod’s metadata contains all the information needed for your project to not only recognize a mod and validate its compatibility, but also display it to your users. It includes a title, description, author, and even optionally an icon you can display.</p>
+
+<h2 id="scanning-for-mods">Scanning for Mods</h2>
+
+<p>In your application, you can retrieve the metadata for all installed mods using the following function:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Scan the modRoot directory for available mods and returns all their respective metadata entries.
+ * @param modRoot The root directory to scan for mods in.
+ * @param apiVersionStr (optional) Enforce a specific API version on mods.
+ * @param errorCallback (optional) A function to receive any PolymodErrors that occur.
+ * @return A list of ModMetadata objects, or an empty list.
+ */</span>
+<span class="nx">Polymod</span><span class="p">.</span><span class="nx">scan</span><span class="p">(</span><span class="nx">modRoot</span><span class="p">,</span> <span class="nx">apiVersionStr</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="_polymod_metajson">_polymod_meta.json</h2>
+
+<p>The metadata JSON contains data which is loaded when scanning mods, and is meant to provide readable information about the mod to users.</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+	<span class="s2">"title"</span><span class="o">:</span><span class="s2">"Dragon"</span><span class="p">,</span>
+	<span class="s2">"description"</span><span class="o">:</span><span class="s2">"Replaces Bees with Dragons"</span><span class="p">,</span>
+    <span class="s2">"homepage"</span><span class="o">:</span> <span class="s2">"https://example.com/dragons"</span><span class="p">,</span>
+	<span class="s2">"contributors"</span><span class="o">:</span> <span class="p">[</span>
+		<span class="p">{</span>
+			<span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Lars A. Doucet"</span><span class="p">,</span>
+			<span class="s2">"role"</span><span class="p">:</span> <span class="s2">"Developer"</span>
+		<span class="p">}</span>
+	<span class="p">],</span>
+	<span class="s2">"api_version"</span><span class="o">:</span><span class="s2">"0.1.0"</span><span class="p">,</span>
+	<span class="s2">"mod_version"</span><span class="o">:</span><span class="s2">"1.0.0-alpha"</span><span class="p">,</span>
+	<span class="s2">"license"</span><span class="o">:</span><span class="s2">"CC BY 4.0,MIT"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">title</code>: The human-readable name of the mod.</li>
+  <li><code class="language-plaintext highlighter-rouge">description</code>: A readable description of the mod. Keep this to only a couple sentences so it can be read without scrolling.</li>
+  <li><code class="language-plaintext highlighter-rouge">homepage</code>: A URL linking to the homepage for the mod. This should be a link where the mod is available for download if the user wants to check for updates.</li>
+  <li><code class="language-plaintext highlighter-rouge">contributors</code>: A list of objects, representing each of the contributors to the mod, with their <code class="language-plaintext highlighter-rouge">name</code>, <code class="language-plaintext highlighter-rouge">role</code>, and optionally an <code class="language-plaintext highlighter-rouge">email</code> or <code class="language-plaintext highlighter-rouge">url</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">author</code>: A string containing the name of the mod’s author.
+    <ul>
+      <li><strong>This field is deprecated</strong>, please use the <code class="language-plaintext highlighter-rouge">contributors</code> field instead.</li>
+      <li>This field is backwards compatible; requesting the <code class="language-plaintext highlighter-rouge">author</code> retrieves the name of the first contributor if available, and falls back to the <code class="language-plaintext highlighter-rouge">author</code> otherwise.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">api_version</code>: This defines the API version for your app which the mod was designed to use.
+    <ul>
+      <li>If the major, minor, AND patch version do not match, the mod will not load. This behavior can be configured; see <a href="./configuring-polymod/">Configuring Polymod</a>.</li>
+      <li>This version must adhere to the Semantic Versioning 2.0 format.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mod_version</code>: This represents the version for the mod itself, and does not relate to the API version.
+    <ul>
+      <li>Mod creators should adhere to the Semantic Versioning 2.0 format.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">license</code>: The licensing terms for your mod. Put a comma between each of the licenses your mod uses.
+    <ul>
+      <li>Please define these, it’s important!</li>
+      <li>A mod may have multiple licenses, since scripts and code can differ in licensing from art or text.</li>
+      <li>Polymod recommends the <a href="https://opensource.org/licenses/MIT">MIT License</a> for code and the <a href="https://creativecommons.org/">Creative Commons</a> for assets.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="other-files">Other files</h2>
+
+<p>It is highly recommended that you also include the following files:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_polymod_icon.png</code>: If a mod provides this image file, it will be read into memory and provided as a Bytes in the <code class="language-plaintext highlighter-rouge">ModMetadata</code> object.</li>
+  <li><code class="language-plaintext highlighter-rouge">LICENSE.txt</code>: This should contain general licensing terms</li>
+  <li><code class="language-plaintext highlighter-rouge">ASSET_LICENSE.txt</code>: This should contain asset-specific licensing terms. Creative Commons is recommended.</li>
+  <li><code class="language-plaintext highlighter-rouge">CODE_LICENSE.txt</code>: This should contain code/script-specific licensing terms, MIT is recommended.</li>
+</ul>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

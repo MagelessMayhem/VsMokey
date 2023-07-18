@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Basic Setup | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Basic Setup" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/basic-setup/" />
+<meta property="og:url" content="http://localhost:4000/docs/basic-setup/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Basic Setup" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Basic Setup","url":"http://localhost:4000/docs/basic-setup/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<h1 id="basic-setup">Basic Setup</h1>
+
+<p>Initializing Polymod is the first and most basic step to implementing modding support in your application.</p>
+
+<p>To start loading mods, simply run <code class="language-plaintext highlighter-rouge">Polymod.init</code>, like so:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Polymod</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="na">modRoot</span><span class="p">:</span> <span class="s2">"./mods/"</span><span class="p">,</span>
+  <span class="na">dirs</span><span class="p">:[</span><span class="s2">"mymod"</span><span class="p">]</span>
+ <span class="p">});</span>
+</code></pre></div></div>
+
+<p>Be sure to do this BEFORE your game loads any assets, and Polymod will do the rest, including determining what game engine you’re using.</p>
+
+<p>After that, all you do is load your game’s assets like you normally do, making sure to utilize your framework’s asset management systems:</p>
+
+<p>OpenFL / HaxeFlxiel / NME:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myImage</span> <span class="o">=</span> <span class="nx">Assets</span><span class="p">.</span><span class="nx">getBitmapData</span><span class="p">(</span><span class="s2">"myImage.png"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Lime:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myImage</span> <span class="o">=</span> <span class="nx">Assets</span><span class="p">.</span><span class="nx">getImage</span><span class="p">(</span><span class="s2">"myImage.png"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>HEAPS:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myImage</span> <span class="o">=</span> <span class="nx">Res</span><span class="p">.</span><span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s2">"myImage.png"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">myImage</code> will use the modified <code class="language-plaintext highlighter-rouge">myImage.png</code> asset if it has been replaced by a mod, and if it hasn’t, it will use the original asset.</p>
+
+<h2 id="loading-additional-mods">Loading Additional Mods</h2>
+
+<p>Of particular note in the snippet above is the <code class="language-plaintext highlighter-rouge">dirs</code> field. This is a list of all the IDs for the mods you wish to load.</p>
+
+<p>Polymod recommends you build a list view, from which users can view which mods they have installed (i.e. present in the <code class="language-plaintext highlighter-rouge">modRoot</code> folder), whether they are enabled (i.e. whether your application passes the mod ID to <code class="language-plaintext highlighter-rouge">dirs</code>), and ideally some way to reprioritize mods (i.e. determine the order of the mod IDs in the <code class="language-plaintext highlighter-rouge">dirs</code> array). You will need to build this list yourself, since Polymod is not a UI library.</p>
+
+<p>However, Polymod has several functions and utilities to assist you in building this list, such as a <code class="language-plaintext highlighter-rouge">scan()</code> function and a standard metadata format. See <a href="./mod-metadata/">Mod Metadata</a> for more details.</p>
+
+<h2 id="samples">Samples</h2>
+
+<p>If you have any issues, please review the sample projects available on the <a href="https://github.com/larsiusprime/polymod">Github repository</a>.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

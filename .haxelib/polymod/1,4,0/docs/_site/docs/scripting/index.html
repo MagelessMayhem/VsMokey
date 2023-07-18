@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Scripting | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Scripting" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/scripting/" />
+<meta property="og:url" content="http://localhost:4000/docs/scripting/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Scripting" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Scripting","url":"http://localhost:4000/docs/scripting/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<h1 id="scripting">Scripting</h1>
+
+<p><img src="preview2.gif" alt="A visual preview of the polymod hscript sample" /></p>
+
+<p>“Okay,” you say, “I can replace all the assets I want, but how do I override the base game’s code?”</p>
+
+<p>There are two ways to support scripting using Polymod:</p>
+
+<ol>
+  <li>Do it yourself</li>
+  <li>Use Polymod’s <code class="language-plaintext highlighter-rouge">HScriptable</code> interface</li>
+</ol>
+
+<h2 id="do-it-yourself-not-recommended">Do it yourself (NOT RECOMMENDED)</h2>
+
+<p>You don’t need a dedicated scripting framework to get moddable scripts. So long as your script files are part of your asset library, they can be replaced or modified like any other text file, and it doesn’t even matter what scripting language you choose.</p>
+
+<p>For example, you could implement Lua scripting through the following method:</p>
+<ol>
+  <li>Load the script file from your assets folder. Polymod will intervene here and load the modded script if it is available.</li>
+  <li>Parse the script.</li>
+  <li>Execute the script.</li>
+  <li>Interpret the result and continue with your program.</li>
+</ol>
+
+<p>However, using this method can overcomplicate your application, since you must handle this entire process yourself. This is a major potential <a href="https://en.wiktionary.org/wiki/footgun">footgun</a> for newcomers, however, so unless you already know what you’re doing, I generally recommend using Polymod’s built-in support for scripting.</p>
+
+<h2 id="use-polymods-hscriptable-interface-recommended">Use Polymod’s <code class="language-plaintext highlighter-rouge">HScriptable</code> interface (RECOMMENDED)</h2>
+<p>Polymod provides an optional interface called <code class="language-plaintext highlighter-rouge">HScriptable</code>. This interface uses the magic of compile-time macros to automatically bind targeted functions to <a href="https://github.com/HaxeFoundation/hscript">hscript</a> scripts.</p>
+
+<p><em>NOTE: Big thanks to <a href="https://github.com/jcward">Jeff Ward</a> for making this possible!</em></p>
+
+<p>There are three steps to enable hscript bindings with Polymod:</p>
+
+<h3 id="1-create-a-class-that-implements-hscriptable">1. Create a class that implements <code class="language-plaintext highlighter-rouge">HScriptable</code></h3>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nx">MyClass</span> <span class="kd">implements</span> <span class="nx">polymod</span><span class="p">.</span><span class="nx">hscript</span><span class="p">.</span><span class="nx">HScriptable</span>
+</code></pre></div></div>
+<p>This class should include some functions you intend to expose to hscript files.</p>
+
+<h3 id="2-tag-a-function-with-the-hscript-metadata">2. Tag a function with the <code class="language-plaintext highlighter-rouge">@:hscript</code> metadata</h3>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">doSomething</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="3-provide-an-hscript-file-matching-the-functions-module--name">3. Provide an hscript file matching the function’s module &amp; name:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data/demo/Simulation/doSomething.txt
+</code></pre></div></div>
+
+<p>When you do all of the above steps, “doSomething.txt” will be parsed during <code class="language-plaintext highlighter-rouge">MyClass</code>’s constructor, and when <code class="language-plaintext highlighter-rouge">MyClass.doSomething()</code> is run, the parsed hscript representation of <code class="language-plaintext highlighter-rouge">doSomething.txt</code> will be executed.</p>
+
+<p>The default root path for scripts is the top-level <code class="language-plaintext highlighter-rouge">/data</code> folder in your assets library. This can be reconfigured, as long as you do so before loading any classes which implement <code class="language-plaintext highlighter-rouge">HScriptable</code>. The file extension used for scripts (which defaults to <code class="language-plaintext highlighter-rouge">.txt</code> for compatibility reasons) can also be configured, and it is recommended that you change it to <code class="language-plaintext highlighter-rouge">.hscript</code> or something similar. See <a href="./configuring-polymod">Configuring Polymod</a> for more information.</p>
+
+<p>You can also toggle whether to use the function’s fully qualified path as a directory prefix (this behavior is on by default). In this example, the file path <code class="language-plaintext highlighter-rouge">demo/Simulation/doSomething</code> corresponds with the function’s fully qualified path in the Haxe namespace, <code class="language-plaintext highlighter-rouge">demo.Simulation.doSomething</code>.</p>
+
+<p>You can also <a href="#choosing-a-custom-script-path">Choose a custom script path</a> on a per-function basis.</p>
+
+<p>Be aware that these paths may be case-sensitive on any case-sensitive file systems (hello Linux!).</p>
+
+<h2 id="a-practical-example">A practical example</h2>
+
+<p>We shall use as our example the <code class="language-plaintext highlighter-rouge">openfl_hscript</code> sample included with Polymod, depicted above. For context, this is a simple simulation containing a field of flowers, some honeybees, and a “home” depicted by a honeypot. Bees will seek out flowers, drain them of pollen, return home, deposit the pollen as honey (updating the score), and then seek a new flower. We would like to expose various aspects of this behavior to scripts, so that users can change the behavior.</p>
+
+<p>First, note that the <code class="language-plaintext highlighter-rouge">Simulation</code> class implements <code class="language-plaintext highlighter-rouge">HScriptable</code>:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nx">Simulation</span> <span class="kd">extends</span> <span class="nx">Sprite</span> <span class="kd">implements</span> <span class="nx">polymod</span><span class="p">.</span><span class="nx">hscript</span><span class="p">.</span><span class="nx">HScriptable</span>
+</code></pre></div></div>
+
+<h3 id="simple-function">Simple function</h3>
+
+<p>Consider this function:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">emptyFlower</span><span class="p">(</span><span class="nx">flower</span><span class="o">:</span><span class="nx">Flower</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>And the corresponding hscript file <code class="language-plaintext highlighter-rouge">emptyFlower.txt</code>:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">flower</span><span class="p">.</span><span class="nx">pollen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nx">flower</span><span class="p">.</span><span class="nx">cooldown</span> <span class="o">=</span> <span class="nx">flower</span><span class="p">.</span><span class="nx">maxCooldown</span><span class="p">;</span>
+<span class="nx">flower</span><span class="p">.</span><span class="nx">alpha</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>For context, this function runs when a bee visits a flower, touches it, and gains pollen. The default script will remove pollen from the flower, start a cooldown timer, and make it appear faded to indicate that it’s depleted.</p>
+
+<p>Note that the function body is empty. The macro will inject all the necessary boilerplate to load the <code class="language-plaintext highlighter-rouge">emptyFlower.txt</code> script file during the <code class="language-plaintext highlighter-rouge">Simulation</code> class’s constructor, and at runtime when <code class="language-plaintext highlighter-rouge">emptyFlower()</code> is called, the <code class="language-plaintext highlighter-rouge">flower:Flower</code> parameter will be passed in to the script as a local variable. So the final <code class="language-plaintext highlighter-rouge">emptyFlower()</code> function post macro-injection actually looks something like this:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">function</span> <span class="nx">emptyFlower</span><span class="p">(</span><span class="nx">flower</span><span class="o">:</span><span class="nx">Flower</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kd">var</span> <span class="na">script</span><span class="p">:</span><span class="nx">Script</span> <span class="o">=</span> <span class="nx">_polymod_scripts</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"emptyFlower"</span><span class="p">);</span>  <span class="c1">//_polymod_scripts initialized in the constructor</span>
+	<span class="nx">script</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">"flower"</span><span class="p">,</span> <span class="nx">flower</span><span class="p">);</span>
+	<span class="nx">script</span><span class="p">.</span><span class="nx">execute</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>NOTE:</strong> <em>Polymod loads the relevant script files to be executed in the object’s constructor, therefore static methods are not supported. This may be changed in the future, but in the meantime you can achieve the same result by utilizing a <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton</a>.</em></p>
+
+<p><strong>NOTE:</strong> <em>Since scripts are loaded in the same manner as other assets, they therefore follow the standard rules for asset replace/append/merge. Keep this in mind when writing scripts, if you want to create and maintain compatibility between mods.</em></p>
+
+<h3 id="adding-variables-to-the-context">Adding variables to the context</h3>
+
+<p>Here’s another function:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">function</span> <span class="nx">updateBee</span><span class="p">(</span><span class="nx">bee</span><span class="o">:</span><span class="nx">Bee</span><span class="p">,</span> <span class="nx">elapsed</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>It only takes two variables, so this should be simple, right?</p>
+
+<p>Well, not so fast:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span><span class="nx">bee</span> <span class="o">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">800</span> <span class="o">||</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="mi">480</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">bee</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">700</span><span class="p">;</span>
+    <span class="nx">bee</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="mi">50</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">380</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">pollen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">isTouching</span><span class="p">(</span><span class="nx">bee</span><span class="p">,</span> <span class="nx">home</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="nx">moveToward</span><span class="p">(</span><span class="nx">bee</span><span class="p">,</span> <span class="nx">home</span><span class="p">,</span> <span class="nx">elapsed</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">isTouching</span><span class="p">(</span><span class="nx">bee</span><span class="p">,</span> <span class="nx">home</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="nx">home</span><span class="p">.</span><span class="nx">honey</span> <span class="o">+=</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">pollen</span><span class="p">;</span>
+            <span class="nx">bee</span><span class="p">.</span><span class="nx">pollen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="nx">updateScore</span><span class="p">(</span><span class="nx">home</span><span class="p">.</span><span class="nx">honey</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">==</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">bee</span><span class="p">.</span><span class="nx">turnsSearching</span><span class="o">++</span><span class="p">;</span>
+    <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">=</span> <span class="nx">getRandomFlower</span><span class="p">();</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">!=</span> <span class="k">null</span> <span class="o">&amp;&amp;</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span><span class="p">.</span><span class="nx">pollen</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">==</span> <span class="k">null</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">turnsSearching</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">=</span> <span class="nx">getRandomFlower</span><span class="p">();</span>
+        <span class="nx">bee</span><span class="p">.</span><span class="nx">turnsSearching</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">!=</span> <span class="k">null</span> <span class="o">&amp;&amp;</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span><span class="p">.</span><span class="nx">pollen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">bee</span><span class="p">.</span><span class="nx">turnsSearching</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">moveToward</span><span class="p">(</span><span class="nx">bee</span><span class="p">,</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span><span class="p">,</span> <span class="nx">elapsed</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">isTouching</span><span class="p">(</span><span class="nx">bee</span><span class="p">,</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span><span class="p">.</span><span class="nx">pollen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">bee</span><span class="p">.</span><span class="nx">pollen</span> <span class="o">=</span> <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span><span class="p">.</span><span class="nx">pollen</span><span class="p">;</span>
+            <span class="nx">emptyFlower</span><span class="p">(</span><span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">bee</span><span class="p">.</span><span class="nx">flower</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>That logic is relying on many other class member variables, and even calling other functions. This is a pretty common situation when you’re trying to convert existing functions into hscript files, and it’s not necessarily a good idea to “fix” the problem by cramming all those references in as explicit function parameters. Not only is that unwieldy, it will change the function signature, requiring you to track down every call to this function and update it. Not only is that a pain, it’s an opportunity to introduce new bugs.</p>
+
+<p>Instead, you can just add extra variables to the script context by adding the <code class="language-plaintext highlighter-rouge">context</code> parameter to your <code class="language-plaintext highlighter-rouge">hscript</code> annotation, like this:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">context</span><span class="p">:</span> <span class="p">[</span><span class="nb">Math</span><span class="p">,</span><span class="nx">bee</span><span class="p">,</span><span class="nx">elapsed</span><span class="p">,</span><span class="nx">home</span><span class="p">,</span><span class="nx">moveToward</span><span class="p">,</span><span class="nx">isTouching</span><span class="p">,</span><span class="nx">getClosestFlower</span><span class="p">,</span><span class="nx">getRandomFlower</span><span class="p">,</span><span class="nx">emptyFlower</span><span class="p">,</span><span class="nx">updateScore</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateBee</span><span class="p">(</span><span class="nx">bee</span><span class="o">:</span><span class="nx">Bee</span><span class="p">,</span> <span class="nx">elapsed</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here the script will receive all the parameters we specified in the provided <code class="language-plaintext highlighter-rouge">context</code>, followed by all the normal function parameters. This is also a good way to pass in global utility classes that are otherwise not available to your scripts, such as <code class="language-plaintext highlighter-rouge">Math</code>, <code class="language-plaintext highlighter-rouge">Std</code>, and <code class="language-plaintext highlighter-rouge">StringTools</code>.</p>
+
+<p><strong>NOTE:</strong> <em>Although your scripts can make changes to any mutable objects you pass in, a local variable within an hscript file is *not* the same as the local variable from your host function with the same name, even if they both *point* to the same object. This means that you can do <code class="language-plaintext highlighter-rouge">bee.pollen = 0</code> in your script and expect to see that change even after the script is finished, but if you do <code class="language-plaintext highlighter-rouge">bee = anotherBee</code> within the script, the <code class="language-plaintext highlighter-rouge">bee</code> variable in your main function will remain unchanged. This is the difference between passing by reference and passing by value used in other languages such as C++, and this can be a common source of subtle bugs if you’re not careful.To TL;DR – scripts can change the internal state of objects that are passed to it, and call functions of those objects, but cannot change what objects that variables are being pointed to.</em></p>
+
+<h3 id="mixing-code-and-scripts">Mixing code and scripts</h3>
+
+<p>Of significant note is that the function body of a scriptable function doesn’t have to be empty!</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nd">@:hscript</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateScore</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">score</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">script_result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The actual script is a simple one-liner:</p>
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"Honey collected: "</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The script simply composes a string, and the function takes the result and updates a text field.</p>
+
+<p>What makes this work is that the macro automatically injects the script logic at the beginning of the <code class="language-plaintext highlighter-rouge">@:hscript</code>-tagged function, before any other code in the function body. Then it defines three new local variables: <code class="language-plaintext highlighter-rouge">script_result</code>, <code class="language-plaintext highlighter-rouge">script_variables</code>, and <code class="language-plaintext highlighter-rouge">script_error</code>. <code class="language-plaintext highlighter-rouge">script_result</code> and <code class="language-plaintext highlighter-rouge">script_error</code> are both <code class="language-plaintext highlighter-rouge">Dynamic</code>, while <code class="language-plaintext highlighter-rouge">script_variables</code> is a <code class="language-plaintext highlighter-rouge">Map&lt;String, Dynamic&gt;</code>.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">script_result</code> is a <code class="language-plaintext highlighter-rouge">Dynamic</code> value that returns the output variable of the script.</li>
+  <li><code class="language-plaintext highlighter-rouge">script_error</code> is a <code class="language-plaintext highlighter-rouge">Dynamic</code> value that contains the error which occured during execution, if any.
+    <ul>
+      <li>See the <a href="#handling-errors">Handling errors</a> section for more info.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">script_variables</code> is a <code class="language-plaintext highlighter-rouge">Map&lt;String, Dynamic&gt; </code> which contains each variable within the local scope of the script, by name.
+    <ul>
+      <li>See the <a href="#retrieving multiple-variables-from-a-script">Retrieving multiple variables from a script</a> section for an example on how to use this.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>In this particular function, we feed <code class="language-plaintext highlighter-rouge">script_result</code> into <code class="language-plaintext highlighter-rouge">score.text</code>.</p>
+
+<p><strong>NOTE:</strong> <em>If your function returns something other than <code class="language-plaintext highlighter-rouge">Void</code>, the macro will inject a <code class="language-plaintext highlighter-rouge">return script_result;</code> line at the end of your function, *after* any code you supply. If you want to return something other than <code class="language-plaintext highlighter-rouge">script_result</code> with your own logic,  be sure to provide your own <code class="language-plaintext highlighter-rouge">return</code> line to force an early return that skips the macro’s injected one.</em></p>
+
+<h3 id="executing-scripts-optionally">Executing scripts optionally</h3>
+
+<p>One notable edge case relating to script functions whose body is where you have code which you always want to run, then optionally wish to run a user-provided script. This can easily be done with the following code:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">optional</span><span class="p">:</span> <span class="k">true</span>
+ <span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateScore</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">currentScore</span> <span class="o">+=</span> <span class="nx">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If <code class="language-plaintext highlighter-rouge">optional</code> is set to <code class="language-plaintext highlighter-rouge">false</code> (the default), Polymod will throw an error when the relevant script is unavailable. Note that in this case, the body of the function will not be executed (especially since the function body may depend on the script_result)</p>
+
+<p>However, if it is true, the following will happen:</p>
+<ul>
+  <li>If the script exists, it will be run, then the body of the function will be run.</li>
+  <li>If the script does NOT exist, Polymod will run the body of the function without an error.</li>
+</ul>
+
+<h3 id="executing-code-optionally">Executing code optionally</h3>
+
+<p>The opposite case can also be performed, say you have a function like the one below:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">cancellable</span><span class="p">:</span> <span class="k">true</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateScore</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">currentScore</span> <span class="o">+=</span> <span class="nx">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the case above, a new function, <code class="language-plaintext highlighter-rouge">cancel()</code>, is provided to the context of the script. If the user’s script calls that function, the function body (which would normally execute after the script) will be skipped entirely.</p>
+
+<p>For example, you could make a function like the following:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">cancellable</span><span class="p">:</span> <span class="k">true</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">onPickUpItem</span><span class="p">(</span><span class="nx">item</span><span class="o">:</span><span class="nx">Item</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">addToInventory</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="nx">removeFromWorld</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If your <code class="language-plaintext highlighter-rouge">onPickUpItem</code> script contained something like the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if (item.properties.includes('slippery')) {
+    cancel();
+}
+</code></pre></div></div>
+
+<p>In this case, items with the property <code class="language-plaintext highlighter-rouge">slippery</code> will not execute the pickup logic.</p>
+
+<h3 id="running-code-before-user-provided-scripts">Running code before user-provided scripts</h3>
+
+<p>Another edge case is one where you want to execute your own code BEFORE the user-provided script’s code. This can be done with the following:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">runBefore</span><span class="p">:</span> <span class="k">true</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateScore</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">score</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In this case, the body of the <code class="language-plaintext highlighter-rouge">updateScore</code> function will run BEFORE the script. This has some notable advantages:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">runBefore</span><span class="p">:</span> <span class="k">true</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateScore</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the snippet above, the conditional block preempts the user-provided script from ever running by returning BEFORE the script is executed.</p>
+
+<h3 id="choosing-a-custom-script-path">Choosing a custom script path</h3>
+
+<p>A common case is the one where a different script path is desired for a given script. Setting custom script paths for each function can help make the structure of the script directory more logical.</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">pathName</span><span class="p">:</span> <span class="s2">"player/updateHighScore"</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateScore</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">score</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">script_result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the above example, the script will be loaded from <code class="language-plaintext highlighter-rouge">data/player/uploadHighScore.txt</code> instead of the default path based on the namespace.</p>
+
+<h3 id="using-dynamic-script-paths">Using dynamic script paths</h3>
+
+<p>The implementation of the <code class="language-plaintext highlighter-rouge">pathName</code> attribute has an important caveat; <em>the pathName does not need to be a constant</em>.</p>
+
+<p>pathName can also be an identifier; if the identifier points to a field or property, its value will be used, and if it points to a function, that function will be called and its return value will be used.</p>
+
+<p>See the example below:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">healthPath</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="k">new</span><span class="p">(</span><span class="nx">type</span><span class="o">:</span><span class="nb">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">healthPath</span> <span class="o">=</span> <span class="s1">'enemy/</span><span class="si">$id</span><span class="s1">/updateHealth'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">pathName</span><span class="p">:</span> <span class="nx">healthPath</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateHealth</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">health</span> <span class="o">=</span> <span class="nx">script_result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nx">getDamagePath</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">'enemy/</span><span class="si">$id</span><span class="s1">/updateDamage'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">pathName</span><span class="p">:</span> <span class="nx">getDamagePath</span>
+<span class="p">})</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">updateDamage</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="nb">Float</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">damage</span> <span class="o">=</span> <span class="nx">script_result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the above example, the script which is called for each function is <em>dynamic</em>, and depends on the <code class="language-plaintext highlighter-rouge">id</code> field of the current object. The variable method or the function method will have the same end result, so which one you use is up to personal preference.</p>
+
+<h3 id="retrieving-multiple-variables-from-a-script">Retrieving multiple variables from a script</h3>
+
+<p>Utilizing the <code class="language-plaintext highlighter-rouge">script_variables</code> value which is passed to the function, you can retrieve any variables from the local context. This allows you to calcualte multiple values with one script.</p>
+
+<p>User script:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">health</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">damage</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Code:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span>
+<span class="k">function</span> <span class="nx">updateMetadata</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'health'</span><span class="p">)</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">health</span> <span class="o">=</span> <span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'health'</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'damage'</span><span class="p">)</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">health</span> <span class="o">=</span> <span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'damage'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="defining-callback-functions-in-a-script">Defining callback functions in a script</h3>
+
+<p>Depending on the structure of your scripted application, you may want to utilize a single script containing multiple functions, rather than multiple scripts each containing a single function.</p>
+
+<p>For example, this may be what you want your user’s script to look like:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">trail</span><span class="p">;</span>
+<span class="k">function</span> <span class="nx">onCreate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">trail</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FlxTrail</span><span class="p">();</span>
+    <span class="nx">add</span><span class="p">(</span><span class="nx">trail</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nx">onUpdate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">trail</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nx">onDestroy</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">remove</span><span class="p">(</span><span class="nx">trail</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>To implement this in code, all you need to do is retrieve each function by name from the <code class="language-plaintext highlighter-rouge">script_variables</code> map provided within the function context.</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nx">getPathName</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">'character/</span><span class="si">$id</span><span class="s1">'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">@:hscript</span><span class="p">({</span>
+    <span class="na">pathName</span><span class="p">:</span> <span class="nx">getPathName</span>
+<span class="p">})</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nx">buildCallbacks</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'onCreate'</span><span class="p">)</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kr">trace</span><span class="p">(</span><span class="s1">'Found character hook: onCreate'</span><span class="p">);</span>
+		<span class="nx">cbOnCreate</span> <span class="o">=</span> <span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'onCreate'</span><span class="p">);</span>
+	<span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'onUpdate'</span><span class="p">)</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kr">trace</span><span class="p">(</span><span class="s1">'Found character hook: onUpdate'</span><span class="p">);</span>
+		<span class="nx">cbOnUpdate</span> <span class="o">=</span> <span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'onUpdate'</span><span class="p">);</span>
+	<span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'onDestroy'</span><span class="p">)</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kr">trace</span><span class="p">(</span><span class="s1">'Found character hook: onDestroy'</span><span class="p">);</span>
+		<span class="nx">cbOnDestroy</span> <span class="o">=</span> <span class="nx">script_variables</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'onDestroy'</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>You can then call the function later as needed:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="k">new</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Make sure to actually CALL the function that runs the script!</span>
+    <span class="nx">buildCallbacks</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cbOnCreate</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbOnCreate</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">override</span> <span class="k">function</span> <span class="nx">update</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cbOnUpdate</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbOnUpdate</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">override</span> <span class="k">function</span> <span class="nx">destroy</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cbOnDestroy</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbOnDestroy</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="kr">super</span><span class="p">.</span><span class="nx">destroy</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Note that these callback functions can utilize any local variables that they created within their script; those variables don’t get destroyed when the script is done.</p>
+
+<h3 id="handling-errors">Handling errors</h3>
+
+<p>If you’re exposing scripts in your project, that means someone can change the game’s logic at runtime, which means they can and will screw something up, which means <em>errors</em>.</p>
+
+<p>You probably want your application to handle them gracefully, or at least give the user some feedback about what went wrong.</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@:hscript</span><span class="p">(</span><span class="nb">Std</span><span class="p">,</span> <span class="nb">Math</span><span class="p">,</span> <span class="nx">numFlowers</span><span class="p">,</span> <span class="nx">numBees</span><span class="p">,</span> <span class="nx">distTest</span><span class="p">,</span> <span class="nx">makeFlower</span><span class="p">,</span> <span class="nx">makeHome</span><span class="p">,</span> <span class="nx">makeBee</span><span class="p">,</span> <span class="nx">home</span><span class="p">)</span>
+<span class="k">private</span> <span class="k">function</span> <span class="nx">init</span><span class="p">()</span><span class="o">:</span><span class="nb">Void</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">script_error</span> <span class="o">!=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+      	<span class="kr">trace</span><span class="p">(</span><span class="s1">'hscript failed to load or threw: '</span><span class="o">+</span><span class="nx">script_error</span><span class="p">);</span>
+        <span class="kr">trace</span><span class="p">(</span><span class="s1">'TODO: Do something to recover from this failure.'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>As mentioned before, the macro will inject a local <code class="language-plaintext highlighter-rouge">script_error</code> variable along with the rest of the boilerplate. If there was a problem with the script (typically: it couldn’t load, or the script itself threw an error), this variable will be set. Note that there is no point in using your own try/catch block; the macro has already done that for you and caught the result, which is now stored in <code class="language-plaintext highlighter-rouge">script_error</code>. If <code class="language-plaintext highlighter-rouge">script_error</code> is null it can be safely ignored.</p>
+
+<p>Handling errors at all is purely optional, but recommended.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

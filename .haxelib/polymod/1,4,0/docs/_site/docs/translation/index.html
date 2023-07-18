@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Translation | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Translation" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/translation/" />
+<meta property="og:url" content="http://localhost:4000/docs/translation/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Translation" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Translation","url":"http://localhost:4000/docs/translation/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<h1 id="translation">Translation</h1>
+
+<h2 id="warning-the-implementation-for-this-is-a-work-in-progress">WARNING: THE IMPLEMENTATION FOR THIS IS A WORK IN PROGRESS.</h2>
+
+<p>Polymod provides easy integration for localization in your app or game. Not only can you retrieve separate data files based on the current language, you can retrieve separate assets as well. Modders can even add support for their own languages with minimal intervention from the development team.</p>
+
+<h2 id="setup">Setup</h2>
+
+<p>Polymod depends on the FireTongue library for localization support. You can install it using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>haxelib install firetongue
+</code></pre></div></div>
+
+<p>FireTongue is optional if you are not utilizing the localization features of Polymod.</p>
+
+<p>Before initializing Polymod, initialize a FireTongue instance for your locale:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">tongue</span><span class="o">:</span><span class="nx">FireTongue</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FireTongue</span><span class="p">();</span>
+<span class="nx">tongue</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="s2">"en-US"</span><span class="p">,</span><span class="nx">onLoaded</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Then, once it loads, you can pass it to Polymod:</p>
+
+<div class="language-haxe highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Polymod</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="p">...</span>
+    <span class="na">firetongue</span><span class="p">:</span> <span class="nx">tongue</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>To change languages later, re-initialize FireTongue with the new locale, and Polymod will automatically update.</p>
+
+<h2 id="using-localization">Using Localization</h2>
+
+<p>When Polymod is used with FireTongue, the directory structure for asset files becomes more complicated.</p>
+
+<p>Your asset folder should look like this (the same structure should be used by mods):</p>
+
+<ul>
+  <li>assets/
+    <ul>
+      <li>locales/
+        <ul>
+          <li>_icons/</li>
+          <li>en-US/
+            <ul>
+              <li>menu.tsv</li>
+              <li>play.tsv</li>
+              <li>options.tsv</li>
+            </ul>
+          </li>
+          <li>pt-BR/
+            <ul>
+              <li>music/
+                <ul>
+                  <li>song-with-lyrics.mp3</li>
+                </ul>
+              </li>
+              <li>menu.tsv</li>
+              <li>play.tsv</li>
+              <li>options.tsv</li>
+            </ul>
+          </li>
+          <li>index.xml</li>
+        </ul>
+      </li>
+      <li>images/
+        <ul>
+          <li>billboard.png</li>
+        </ul>
+      </li>
+      <li>music/
+        <ul>
+          <li>song-with-lyrics.mp3</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>There is no need to move the assets for your default locale into the <code class="language-plaintext highlighter-rouge">locale</code> folder, since the base directory will be used as a fallback anyway, and there is no need to copy assets to the other locales if you have not changed them.</p>
+
+<p>Modded assets will take priority over unmodded assets, and localized assets take priority over unlocalized ones. For example, when checking which file to load, the following procedure is followed:</p>
+
+<ul>
+  <li>Polymod will check if a mod contains the asset within the locale folder, and use that if it can.</li>
+  <li>Otherwise, Polymod will check if the mod contains the asset within the base folder, and use that if it can.</li>
+  <li>Otherwise, Polymod will check if the base files contain the asset within the locale folder, and use that if it can.</li>
+  <li>Otherwise, Polymod will use the base asset from the base folder.</li>
+</ul>
+
+<p>For example, if a mod replaces <code class="language-plaintext highlighter-rouge">assets/music/song-with-lyrics.mp3</code>, that new asset will be used, even if the user is playing in the Portuguese language and would normally load <code class="language-plaintext highlighter-rouge">assets/locales/pt-BR/music/song-with-lyrics.mp3</code>.</p>
+
+<p>Additionally, if a mod adds the file <code class="language-plaintext highlighter-rouge">assets/locales/pt-BR/images/billboard.png</code>, that asset will be used, as long as the user is playing in the Portuguese language, <em>even if another mod has its own replacement for <code class="language-plaintext highlighter-rouge">assets/images/billboard.png</code>.</em></p>
+
+<h2 id="best-practices">Best Practices</h2>
+
+<p>When using Polymod with FireTongue, you should utilize FireTongue for user interface text whenever possible, and utilize Polymod’s  localization integration only for things like graphics, audio, and script files.</p>
+
+<p>FireTongue has many utilities to help you present localized text, and best practices on how to provide localization to users. Check out <a href="https://github.com/larsiusprime/firetongue#advanced-use">FireTongue’s documentation</a> for more information.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

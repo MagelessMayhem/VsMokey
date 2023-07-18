@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Merging Files | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Merging Files" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/merging-files/" />
+<meta property="og:url" content="http://localhost:4000/docs/merging-files/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Merging Files" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Merging Files","url":"http://localhost:4000/docs/merging-files/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<h1 id="merging-files">Merging Files</h1>
+
+<p>Merging files in Polymod can be complex, but it is also the most powerful method, since it allows you to interact with more complex data types such as JSON.</p>
+
+<h2 id="parse-rules">Parse Rules</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">parseRules</code> parameter, provided to Polymod upon initialization, allows you to define which of the below methods are used for each file extension or even each specific file.</p>
+
+<p>You may also define your own parsing rules by extending <code class="language-plaintext highlighter-rouge">polymod.format.BaseParseFormat</code>, adding your own implementation, then referencing it for the relevant file extensions in your parse rules.</p>
+
+<h2 id="merging-for-xml">Merging for XML</h2>
+
+<p>Say you have a big complicated XML file at <code class="language-plaintext highlighter-rouge">data/stuff.xml</code> with lots of nodes:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="nt">&lt;data&gt;</span>
+   <span class="c">&lt;!--lots of complicated stuff--&gt;</span>
+   <span class="nt">&lt;mode</span> <span class="na">id=</span><span class="s">"difficulty"</span> <span class="na">values=</span><span class="s">"easy"</span><span class="nt">/&gt;</span>
+   <span class="c">&lt;!--even more complicated stuff--&gt;</span>
+<span class="nt">&lt;/data&gt;</span>
+</code></pre></div></div>
+
+<p>And you want it to say this instead:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="nt">&lt;data&gt;</span>
+   <span class="c">&lt;!--lots of complicated stuff--&gt;</span>
+   <span class="nt">&lt;mode</span> <span class="na">id=</span><span class="s">"difficulty"</span> <span class="na">values=</span><span class="s">"super_hard"</span><span class="nt">/&gt;</span>
+   <span class="c">&lt;!--even more complicated stuff--&gt;</span>
+<span class="nt">&lt;/data&gt;</span>
+</code></pre></div></div>
+
+<p>Basically we want to change this one tag from this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;mode</span> <span class="na">id=</span><span class="s">"difficulty"</span> <span class="na">values=</span><span class="s">"easy"</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>to this:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;mode</span> <span class="na">id=</span><span class="s">"difficulty"</span> <span class="na">values=</span><span class="s">"super_hard"</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>This is the file you would put in <code class="language-plaintext highlighter-rouge">&lt;modroot&gt;/&lt;mergeFolder&gt;/data/stuff.xml</code>:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="nt">&lt;data&gt;</span>
+    <span class="nt">&lt;mode</span> <span class="na">id=</span><span class="s">"difficulty"</span> <span class="na">values=</span><span class="s">"super_hard"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;merge</span> <span class="na">key=</span><span class="s">"id"</span> <span class="na">value=</span><span class="s">"difficulty"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/mode&gt;</span>
+<span class="nt">&lt;/data&gt;</span>
+</code></pre></div></div>
+
+<p>This file contains both data and merge instructions. The <code class="language-plaintext highlighter-rouge">&lt;merge&gt;</code> child tag tells the mod loader what to do, and will not be included in the final data. The actual payload is just this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;mode</span> <span class="na">id=</span><span class="s">"difficulty"</span> <span class="na">values=</span><span class="s">"super_hard"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">&lt;merge&gt;</code> tag instructs the mod loader thus:</p>
+
+<ul>
+  <li>Look for any tags with the same name as my parent (in this case, <code class="language-plaintext highlighter-rouge">&lt;mode&gt;</code>)</li>
+  <li>Look within said tags for a <code class="language-plaintext highlighter-rouge">key</code> attribute (in this case, one named <code class="language-plaintext highlighter-rouge">"id"</code>)</li>
+  <li>Check if the key’s value matches what I’m looking for (in this case, <code class="language-plaintext highlighter-rouge">"difficulty"</code>)</li>
+</ul>
+
+<p>As soon as it finds the first match, it stops and merges the payload with the specified tag. Any attributes will be added to the base tag (overwriting any existing attributes with the same name, which in this case changes values from “easy” to just “super_hard”, which is what we want). Furthermore, if the payload has child nodes, all of its children will be merged with the target tag as well.</p>
+
+<h2 id="merging-csv-and-tsv">Merging CSV and TSV</h2>
+
+<p>CSV and TSV files can be merged as well. In this case, the mod loader will look for any rows in the base file whose first cell matches the same value as those in the merge file, and replace them with the rows from the merge file.</p>
+
+<p>Advanced merge logic for CSV/TSV (i.e. specifying a column other than the first one as the primary merge key) is not yet supported.</p>
+
+<h2 id="merging-for-json">Merging for JSON</h2>
+
+<p>JSON acts somewhat similarly to XML. Say you have a data file like this:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"difficulty"</span><span class="p">:</span><span class="w"> </span><span class="s2">"easy"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"nested"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+	    </span><span class="nl">"enemies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+	    	</span><span class="p">{</span><span class="w">
+		    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"foo"</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+	    	</span><span class="p">{</span><span class="w">
+		    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bar"</span><span class="p">,</span><span class="w">
+		    </span><span class="nl">"weapon"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deagle"</span><span class="w">
+		</span><span class="p">},</span><span class="w">
+	    	</span><span class="p">{</span><span class="w">
+		    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"baz"</span><span class="w">
+		</span><span class="p">}</span><span class="w">
+	    </span><span class="p">]</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>And you want to change the difficulty to <code class="language-plaintext highlighter-rouge">super_hard</code>, same idea as the XML. We also want to bump up Bar’s meager Desert Eagle into a fearsome Minigun. Instead of specifying the whole structure and putting a merge tag underneath it, you create a single top-level array called <code class="language-plaintext highlighter-rouge">merge</code>, specify the full path to inject into, along with the payload to inject, like so:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"merge"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    	</span><span class="p">{</span><span class="w">
+	    </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data.difficulty"</span><span class="p">,</span><span class="w">
+	    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="s2">"super_hard"</span><span class="w">
+	</span><span class="p">},</span><span class="w">
+	</span><span class="p">{</span><span class="w">
+	    </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data.nested.enemies[1].weapon"</span><span class="p">,</span><span class="w">
+	    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="s2">"minigun"</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>You can inject as many values as you like into as many paths as you like.</p>
+
+<h2 id="merging-for-plaintext">Merging for Plaintext</h2>
+
+<p>Merging for plaintext is not supported. Please use _append, or adapt your file to some other structure such as JSON or XML.</p>
+
+<h2 id="merging-for-binary-files">Merging for Binary Files</h2>
+
+<p>Merging for binary files is currently not supported. You may implement your own binary merging method by extending <code class="language-plaintext highlighter-rouge">BaseParseFormat</code> in your own application.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

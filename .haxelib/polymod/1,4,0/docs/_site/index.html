@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Polymod" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Polymod" />
+<script type="application/ld+json">
+{"@type":"WebSite","headline":"Polymod","url":"http://localhost:4000/","name":"Polymod","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="doc_banner" href="/docs/">Documentation</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <!--
+[![Build Status](https://github.com/larsiusprime/polymod/workflows/Build/badge.svg "GitHub Actions")](https://github.com/larsiusprime/haxe-concurrent/actions?query=workflow%3A%22Build%22)
+-->
+<p><a href="http://lib.haxe.org/p/polymod"><img src="https://img.shields.io/github/release/larsiusprime/polymod.svg" alt="Release" /></a>
+<a href="#license"><img src="https://img.shields.io/github/license/larsiusprime/polymod.svg?label=license" alt="License" /></a>
+<a href="https://github.io/larsiusprime/polymod/issues"><img src="https://img.shields.io/github/issues/larsiusprime/polymod.svg?label=issues" alt="Issues" /></a></p>
+
+<p>Polymod is an atomic modding framework for use with Haxe. It supports scripting as well as replacement of any asset.</p>
+
+<ol>
+  <li><a href="#showcase">Showcase</a></li>
+  <li><a href="#what-is-polymod">What is Polymod?</a></li>
+  <li><a href="#supported-platforms">Supported Platforms</a></li>
+  <li><a href="#features">Features</a></li>
+  <li><a href="/docs/">Documentation</a></li>
+</ol>
+
+<h2 id="showcase">Showcase</h2>
+
+<p>Here are some of the wonderful games and apps that use Polymod!</p>
+
+<!--
+<a href="https://www.newgrounds.com/portal/view/770371" style="width: 100%; float: left;">
+  <img src="assets/images/showcase/fridayNightFunkin.png" alt="Friday Night Funkin'"
+      style="width: 100%; padding: 0;" />
+</a>
+-->
+
+<div style="padding-bottom: 12px">
+<a href="http://www.defendersquest.com/1/" style="width: 30%; float: left;">
+  <img src="/assets/images/showcase/defendersQuest2.png" alt="Defender's Quest꞉ Valley of the Forgotten" style="width: 100%; padding: 0;" />
+</a>
+
+<a href="https://store.steampowered.com/app/861540/Dicey_Dungeons/" style="width: 30%; float: left;">
+  <img src="/assets/images/showcase/diceyDungeons.png" alt="Dicey Dungeons" style="width: 100%; padding: 0;" />
+</a>
+
+<a href="http://www.defendersquest.com/2/" style="width: 30%; float: left;">
+  <img src="/assets/images/showcase/defendersQuest2.png" alt="Defender's Quest 2" style="width: 100%; padding: 0;" />
+</a>
+</div>
+
+<h2 id="what-is-polymod">What is Polymod?</h2>
+
+<p>If you’re developing a game or app, and you’re looking to allow users to manage and install mods for it, the easiest way to do this is to:</p>
+
+<ol>
+  <li>Make your game data-driven (expose as much of your content in the form of loose data files as possible)</li>
+  <li>Let players provide their own data files</li>
+</ol>
+
+<p>Easy enough. But what if you want players to be able to use multiple mods together? How do you manage that?</p>
+
+<p>Polymod solves both problems.</p>
+
+<p>First, it <strong>overrides your framework’s asset system</strong> with a custom one pointed at a mod folder (or folders) somewhere on the user’s hard drive. Whenever you request an asset via <code class="language-plaintext highlighter-rouge">Assets.getBitmapData()</code> or <code class="language-plaintext highlighter-rouge">Res.loader.load()</code> call or whatever, the custom backend first checks if the mod has a modified version of this file. If it does, it returns the mod’s modified version. If it doesn’t, it falls through to the default asset system (the assets included with the game).</p>
+
+<p>Second, it <strong>combines mods atomically</strong>. Instead of supplying one mod folder, you can provide several. Polymod will go through each folder in turn and apply the changes from each mod, automatically joining them into one combined mod at runtime. Note that this means that the order you load the mods in matters, in the case that they have overlapping changes.</p>
+
+<h2 id="supported-platforms">Supported Platforms</h2>
+
+<p>Polymod currently works with the following frameworks:</p>
+<ul>
+  <li><a href="https://github.com/openfl/lime">Lime</a></li>
+  <li><a href="https://www.openfl.org">OpenFL</a>
+    <ul>
+      <li><a href="https://haxeflixel.com">HaxeFlixel</a></li>
+      <li><a href="https://github.com/openfl/away3d">Away3D</a></li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/haxenme/nme">NME</a></li>
+  <li><a href="https://www.heaps.io">HEAPS</a></li>
+</ul>
+
+<p>Polymod also supports providing a custom backend if you need it.</p>
+
+<p>Polymod currently supports the following file systems:</p>
+<ul>
+  <li>Windows, Mac, and Linux (with access to the File System)</li>
+  <li>NodeJS via Electron (with access to the File System)</li>
+</ul>
+
+<p>Polymod also supports providing a custom file system if you need it.</p>
+
+<h2 id="features">Features</h2>
+
+<p>Polymod supports the following kinds of operations for your players’ mods:</p>
+<ul>
+  <li>Replace default assets with custom ones</li>
+  <li>Append data to the end of an existing asset
+    <ul>
+      <li>This is only supported for plaintext assets.</li>
+    </ul>
+  </li>
+  <li>Merge data at a specified location within an existing asset.
+    <ul>
+      <li>This is supported for plaintext, CSV/TSV, JSON, and XML files.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Asset replacement works with ANY asset type, including but not limited to music and graphics.</p>
+
+<p>Polymod also supports scripting in Haxe, allowing modders to supply custom logic you can utilize in your application.</p>
+
+<h2 id="documentation">Documentation</h2>
+
+<p><a href="/docs">Click here</a> to view the full documentation.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

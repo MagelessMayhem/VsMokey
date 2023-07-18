@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=">
+    <base href="/[repo]/">
+
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+      href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+      href="/favicon-16x16.png" />
+    <link rel="manifest"
+      href="/site.webmanifest" />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Best Practices | Polymod</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Best Practices" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/best-practices/" />
+<meta property="og:url" content="http://localhost:4000/docs/best-practices/" />
+<meta property="og:site_name" content="Polymod" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Best Practices" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Best Practices","url":"http://localhost:4000/docs/best-practices/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- TODO: Change this to latest release -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <a id="home_banner" href="/">Home</a>
+    
+
+<a id="issue_banner" href="">Report an Issue</a>
+
+<div style="display:flex;align-items:center;flex-direction: row;">
+    <img
+    id="header-logo"
+    style="height: 192px; width: 192px;"
+    src="/assets/images/logo.png""
+    alt="Polymod" />
+    <h1 style="color: #EFEFEF;">Polymod</h1>
+</div>
+<h2 id="project_tagline"></h2>
+
+<!-- This is auto-populated from the Github repo! -->
+<div style="color: #EFEFEF; text-align: right; font-size: 0.9em;">
+    Download with <code>haxelib install polymod</code>
+</span>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+<div id="toc" class="sidebar">
+
+<h2>Documentation</h2>
+<ul>
+    <li>
+        <a href="/docs/basic-setup">Basic Setup</a>
+    </li>
+    <li>
+        <a href="/docs/best-practices">Best Practices</a>
+        <ul>
+            <li>
+                <a href="/docs/best-practices#for-game-developers">(for game developers)</a>
+            </li>
+            <li>
+                <a href="/docs/best-practices#for-modders">(for modders)</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="/docs/configuring-polymod">Configuring Polymod</a>
+    </li>
+    <li>
+        <a href="/docs/creating-mods">Creating Mods</a>
+        <ul>
+            <li>
+                <a href="/docs/mod-metadata">Mod Metadata</a>
+            </li>
+            <li>
+                <a href="/docs/mod-packs">Mod Packs</a>
+            </li>
+            <li>
+                <a href="/docs/scripting">Scripting</a>
+            </li>
+            <li>
+                <a href="/docs/merging-files">Merging Files</a>
+            </li>
+            <li>
+                <a href="/docs/translation">WIP: Translation</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<h1 id="best-practices">Best Practices</h1>
+
+<h2 id="for-game-developers">For game developers</h2>
+
+<h3 id="1-use-loose-flat-files">1. Use loose, flat files</h3>
+
+<p>Mods work best when modders can rely entirely on replace and append logic. The easiest way to facilitate this is to leave files separated out one by one rather than all glommed together. For instance, it’s way easier to replace just one character sprite if each character sprite sheet is its own file, rather than all of them being packed together in one. Although a modder can easily copy and paste the packed file, make a change, and add it to their mod as a replacement, this becomes fragile in two ways:</p>
+
+<ol>
+  <li>If the base game updates that file (say parts other than what the modder changed), the mod will now have an old version of it, even though they only intended to modify one part of it.</li>
+  <li>If two modders want to change different in-game objects that reside in the same file, and they both use replace logic, their changes will override each other and only one will be resolved in the final asset set.</li>
+</ol>
+
+<p>Of course, for performance reasons developers will often combine files, so there’s some tension here. However keep in mind that the OpenFL Asset Library is a kind of <em>virtual file system</em>. The default asset library provides a nearly one-to-one mapping between asset names and actual files on disk, but there’s no reason you couldn’t override your default asset library with say, an asset library that stores everything on disk in one single binary (even encrypted!) PAK file or whatever, while still exposing a nice list of individual asset names. Polymod doesn’t care how your actual assets are stored and loaded from disk.</p>
+
+<h3 id="2-texture-packs">2. Texture packs</h3>
+
+<p>Most texture packs will provide metadata that allows the original image frames/files to be extracted from a packed file, which in its own way is a tiny virtual file system. You might consider modifying your game/app code to first look for a given asset stored in its own loose file (in case a modder has provided one), before looking in your texture atlas cache.</p>
+
+<h3 id="3-data-tables">3. Data tables</h3>
+
+<p>Data tables and other “flat” file formats can work very well with atomic modding, particularly with append logic. If adding new items or enemies is as simple as adding a new line to a spreadsheet, this is ideal for modders who want to create mix-and-matchable content.</p>
+
+<h3 id="4-publish-a-modding-api-adhere-to-semantic-versioning">4. Publish a modding API, adhere to Semantic Versioning</h3>
+
+<p>As soon as your game is ready for modding, you should publish documrentation for your modding API for your game that tells players what they can expect to modify and how, as well as an associated Mod API version. Don’t forget to adhere to <a href="https://semver.org/">Semantic Versioning 2.0</a>, which is summarized thus:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Given a version number MAJOR.MINOR.PATCH, increment the:
+
+MAJOR version when you make incompatible API changes,
+MINOR version when you add functionality in a backwards-compatible manner, and
+PATCH version when you make backwards-compatible bug fixes.
+</code></pre></div></div>
+
+<h3 id="5-use-the-error-handler">5. Use the error handler</h3>
+
+<p>You should pass in an error handler during initialization and then <em>use it</em>, ideally piping useful feedback to your players so that they can debug their mods and make sure they’re properly formatted.</p>
+
+<p>Keep in mind that the <code class="language-plaintext highlighter-rouge">PolymodError</code> object that the handler receives includes several useful attributes, including:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">serverity</code>, which indicates if the message is merely a notice, or if it’s a warning or error.</li>
+  <li><code class="language-plaintext highlighter-rouge">code</code>, which is one of the values of the <code class="language-plaintext highlighter-rouge">PolymodErrorCode</code> enumeration. This can be used with a switch/case block to provide different handling for different types of errors.</li>
+  <li><code class="language-plaintext highlighter-rouge">message</code>, which can be written to a log file or displayed to the user.</li>
+</ul>
+
+<h3 id="6-data-driven-design">6. Data-driven design</h3>
+
+<p>A game that is mod friendly should be heavily data-driven. This means that, rather than hard-coding your list of enemy types, the game should draw from a text file or directory listing. This way players can define their own types by simply adding or appending files.</p>
+
+<h3 id="7-support-scripting">7. Support scripting</h3>
+
+<p>Certain parts of your code, such as basic game logic, AI routines, formula calculations, etc, can be exposed to modding via scripts – human-readable code interpreted at runtime. Polymod can support any scripting language in theory, but we strongly recommend <a href="https://github.com/HaxeFoundation/hscript">hscript</a> for Haxe games. See <a href="./scripting/">Scripting</a> for more details.</p>
+
+<p>If you do so, you should document a list of methods and properties exposed by your scripting system, and publish these along with your default asset manifest as your game’s modding API.</p>
+
+<p>The current version of Polymod does not support targeted merge logic for Haxe script files, so to best support modders, stick to simple isolated script files. Support for this may eventually be added in the future.</p>
+
+<h3 id="8-encourage-generic-ids-as-merge-keys">8. Encourage generic ids as merge keys</h3>
+
+<p>If you look at the sample mod represented by the GIF at the top of this page, you’ll notice a slight “bug” of sorts. The base app has three images, a sun, a moon, and a star, and an XML file with tags like <code class="language-plaintext highlighter-rouge">&lt;object value="sun"/&gt;</code> to match. Notice that when activating mods 1-3, each one replaces one of the graphics with a different kind of flower, and updates the xml tags to match. The mods are using file replace logic for the images, and merge logic for the xml file.</p>
+
+<p>But, notice what happens when mod 4 is activated. Mod 4 replaces the entire XML file so that the xml nodes have values “pineapple”, “apple”, and “bread”. Notice that when Mod 4 is moved into load position 1 and the other mods are activated, the flowers replace the image assets, but they don’t properly update the XML data. That’s because the replace logic targets the same filenames (“a.png”, “b.png”, “c.png”), but the merge logic is keyed off of the specific value names (“sun”, “moon”, “stars”). So when the value names are changed, mods that depend on those specific values as merge keys will not act as intended.</p>
+
+<p>If this file structure had been designed so that each <code class="language-plaintext highlighter-rouge">&lt;object&gt;</code> tag had a generic key like <code class="language-plaintext highlighter-rouge">&lt;object id="0" value="sun"/&gt;</code>, and the mods were written to replace based on the unchanging key (<code class="language-plaintext highlighter-rouge">id="0"</code> instead of <code class="language-plaintext highlighter-rouge">object="sun"</code>), then these mods would work as intended.</p>
+
+<h3 id="9-think-about-security">9. Think about security</h3>
+
+<p>Players modifying their games to accept random untrusted third party content are already exposing themselves in a fundamental way, but there’s perhaps some things we can do to shave the attack surface area down a bit. For one, special care needs to be taken if some of the assets you’re loading via Polymod are driving in-game scripts and have access to e.g. File read/write/delete API’s (or even worse, invoking system commands and/or launching other executables). At the moment, Polymod does absolutely nothing to protect you from this, so you must make your own safeguards. In the future we might provide some basic sandboxing or safety checks.</p>
+
+<h2 id="for-modders">For modders</h2>
+
+<h3 id="1-start-simple">1. Start simple</h3>
+
+<p>Don’t try to do too much too fast. Start with something basic, like replacing a single loose image, or adding a line of text somewhere. Don’t try to change too much at once – make one small edit, then test your mod to see how it’s working. You can build up steady momentum this way as you build familiarity with both modding in general and the game’s specific data set.</p>
+
+<h3 id="2-include-a-license">2. Include a license</h3>
+
+<p>If your mod doesn’t include a license, it’s in a legal gray area. By default, anything you create is automatically your copyright (in the USA at least), and in the absence of a license the assumption is that it’s “all rights reserved” – ie, nobody’s allowed to use it any way you haven’t specifically permitted.</p>
+
+<p>It gets even worse if other people want to include your mod in theirs, or build off of it. To foster a collaborative modding community, I strongly recommend using open licenses such as these:</p>
+
+<p><a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> – for assets and data, etc.
+<a href="https://opensource.org/licenses/MIT">MIT License</a> – for code/script files, etc.</p>
+
+<h3 id="3-it-doesnt-have-to-be-big">3. It doesn’t have to be big</h3>
+
+<p>Some of the best mods are simple ones that just do one thing. Since Polymod lets you combine multiple mods easily, it can be nice to just make a few small mods rather than one big one. You can always create a modpack to link multiple atomic mods together, after all.</p>
+
+<h3 id="4-dont-over-rely-on-merge-logic">4. Don’t over-rely on merge logic</h3>
+
+<p>Merge logic is the most complicated, least flexible, and most error prone of the three supported operations. If the developer has structured their game well, you should be able to get most of your work done with just append and replace logic. You should save merge logic only for problems you can’t solve any other way.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>
